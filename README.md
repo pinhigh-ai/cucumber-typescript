@@ -1,11 +1,11 @@
 # cucumber-typescript
 
-A Warp Agent Skill for writing Cucumber tests in TypeScript against HTTP APIs.
+An Agent Skill for writing Cucumber tests in TypeScript against HTTP APIs.
 
 If you have never used Cucumber, start at [Part 1](#part-1--cucumber-in-fifteen-minutes).
 If you have, skip to [Part 2](#part-2--the-conventions) for the conventions this skill
 enforces, [Part 3](#part-3--the-example-steps) for the steps the scaffold starts you
-with, or [Part 4](#part-4--installing-in-warp) to install it.
+with, or [Part 4](#part-4--installing) to install it.
 
 ---
 
@@ -684,47 +684,50 @@ greenfield project doesn't start from an empty directory.
 
 ---
 
-## Part 4 — Installing in Warp
+## Part 4 — Installing
 
-Warp discovers skills from `.agents/skills/` directories. Each skill is a folder
-containing `SKILL.md`; supporting files sit alongside it.
+The skill follows the open [Agent Skills](https://skills.sh) format, so it installs with
+the `skills` CLI into any supported agent — Claude Code, Cursor, Codex, Warp, Gemini CLI,
+Copilot, and the rest.
 
-### Global — available in every project
+### Install
 
-```bash
-mkdir -p ~/.agents/skills
-unzip cucumber-typescript.zip -d ~/.agents/skills/
-```
-
-### Project — committed, shared with the team
+The skill is published at [github.com/pinhigh-ai/cucumber-typescript](https://github.com/pinhigh-ai/cucumber-typescript):
 
 ```bash
-mkdir -p .agents/skills
-unzip cucumber-typescript.zip -d .agents/skills/
-git add .agents/skills/cucumber-typescript
+npx skills add pinhigh-ai/cucumber-typescript
 ```
 
-Either way you should end up with:
+The CLI detects which agents you have and asks where to install. Skip the prompts with
+`-y`, or target agents explicitly:
 
-```
-.agents/skills/cucumber-typescript/
-├── SKILL.md
-├── README.md
-├── references/
-└── assets/
+```bash
+npx skills add pinhigh-ai/cucumber-typescript -a claude-code -a cursor -y
 ```
 
-Warp picks it up on your next interaction — no restart, no registration step.
+### Project vs. global
+
+By default the skill lands in the current project under `.agents/skills/`, with links
+into each selected agent's own skills directory (for example `.claude/skills/`). Commit
+that folder to share it with the team.
+
+To make it available in every project instead, install globally:
+
+```bash
+npx skills add pinhigh-ai/cucumber-typescript -g
+```
 
 ### Verifying
 
-Ask the agent:
+```bash
+npx skills list
+```
+
+`cucumber-typescript` should appear with its install path. Or just ask your agent:
 
 ```
 What skills do I have?
 ```
-
-`cucumber-typescript` should appear with its description.
 
 ### Using it
 
@@ -744,23 +747,13 @@ Both work. The slash command guarantees the skill loads; natural language relies
 agent matching your request against the description, which is why the description is
 written the way it is.
 
-### Editing it later
+### Updating and removing
 
+```bash
+npx skills check      # report installed skills that have a newer version
+npx skills update     # pull the latest version of every installed skill
+npx skills remove cucumber-typescript
 ```
-/open-skill
-```
-
-Opens a menu of discovered skills and lets you open one in your editor.
-
-### Two things to know about discovery
-
-Skill discovery follows your **current working directory**. Inside a git repo, Warp
-includes skills from your current directory up through the repo root — so a project
-skill in `.agents/skills/` is visible anywhere in that repo, but not from a different
-project.
-
-If a global and a project skill share a name, Warp shows both in the slash-command menu
-with their paths so you can pick.
 
 ---
 
